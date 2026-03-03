@@ -1,0 +1,52 @@
+{
+  "id": "delta-classification",
+  "name": "Delta Document Classification",
+  "description": "AI-powered document classification for regulatory documents. Provides tools for entity matching, document type identification, and automated filing workflows.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "deltaApiUrl": {
+        "type": "string",
+        "description": "URL of the Delta Platform API (Python backend)"
+      },
+      "deltaApiToken": {
+        "type": "string",
+        "description": "Authentication token for the Delta Platform API"
+      },
+      "autoClassifyOnWebhook": {
+        "type": "boolean",
+        "description": "Automatically trigger classification when Paperless webhook fires"
+      },
+      "reviewThreshold": {
+        "type": "number",
+        "description": "Confidence threshold below which human review is required (0.0–1.0)"
+      },
+      "defaultModel": {
+        "type": "string",
+        "description": "Default model for classification (e.g., anthropic/claude-haiku-4-5-20251001)"
+      },
+      "notifyChannel": {
+        "type": "string",
+        "description": "Channel ID to send classification results and review requests"
+      }
+    }
+  },
+  "uiHints": {
+    "deltaApiUrl": {
+      "label": "Delta API URL",
+      "help": "The URL where the Delta Platform Python services are running",
+      "placeholder": "http://localhost:8000"
+    },
+    "deltaApiToken": {
+      "label": "API Token",
+      "help": "Token for authenticating with Delta Platform services",
+      "sensitive": true
+    },
+    "reviewThreshold": {
+      "label": "Review Threshold",
+      "help": "Documents classified below this confidence level will be flagged for human review",
+      "placeholder": "0.90"
+    }
+  }
+}
