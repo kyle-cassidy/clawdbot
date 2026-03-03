@@ -1,0 +1,15 @@
+{
+  "name": "@delta/classification-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Delta Analytical document classification plugin for OpenClaw",
+  "type": "module",
+  "devDependencies": {
+    "openclaw": "workspace:*"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}
