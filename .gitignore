@@ -2,6 +2,29 @@ node_modules
 **/node_modules/
 .env
 docker-compose.override.yml
+
+# OpenClaw prod config — full runtime state with secrets (never commit)
+config/
+
+# OpenClaw dev config — runtime state (never commit)
+config-dev/devices/
+config-dev/identity/
+config-dev/sessions/
+config-dev/logs/
+config-dev/workspace/
+config-dev/agents/
+config-dev/cron/
+config-dev/update-check.json
+config-dev/exec-approvals.json
+
+# Runtime workspace (never commit)
+workspace/
+
+# Google Chat service account credentials (real files — never commit)
+# The committed googlechat-service-account-dev.json is a safe placeholder.
+# When you have real credentials, store them at a different path and update
+# channels.googlechat.serviceAccountFile in config-dev/openclaw.json.
+googlechat-service-account*.real.json
 docker-compose.extra.yml
 docker-compose.sandbox.yml
 dist
