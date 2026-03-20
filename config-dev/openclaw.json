@@ -1,0 +1,51 @@
+{
+  "agents": {
+    "defaults": {
+      "compaction": {
+        "mode": "safeguard"
+      }
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "gateway": {
+    "controlUi": {
+      "allowedOrigins": [
+        "http://localhost:28800",
+        "http://localhost:18800",
+        "https://openclaw-gateway.delta-data-platform.orb.local"
+      ]
+    },
+    "auth": {
+      "mode": "token",
+      "token": "dev-openclaw-token"
+    },
+    "trustedProxies": ["192.168.0.0/16", "172.16.0.0/12"]
+  },
+  "channels": {
+    "signal": {
+      "enabled": true,
+      "account": "REPLACE_WITH_BOT_PHONE_NUMBER",
+      "httpUrl": "http://dev-signal-cli:8080",
+      "autoStart": false,
+      "dmPolicy": "pairing"
+    },
+    "googlechat": {
+      "enabled": true,
+      "serviceAccountFile": "/home/node/.openclaw/googlechat-service-account.json",
+      "audienceType": "app-url",
+      "audience": "REPLACE_WITH_PUBLIC_HTTPS_WEBHOOK_URL",
+      "dm": {
+        "policy": "pairing"
+      }
+    }
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.3.9",
+    "lastTouchedAt": "2026-03-16T00:00:00.000Z"
+  }
+}

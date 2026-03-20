@@ -1,0 +1,46 @@
+# signal-cli dev sidecar for OpenClaw gateway
+#
+# Runs signal-cli in HTTP daemon mode on port 8080.
+# OpenClaw connects via channels.signal.httpUrl = "http://dev-signal-cli:8080"
+#
+# FIRST-TIME SETUP (link to an existing Signal account via QR):
+#   docker compose -f docker-compose.dev.yml run --rm --entrypoint "" \
+#     dev-signal-cli signal-cli -a "$SIGNAL_BOT_PHONE" link -n "Delta OpenClaw Dev"
+#   -- scan the printed QR code in Signal, then restart the service
+#
+# FIRST-TIME SETUP (register a dedicated number):
+#   docker compose -f docker-compose.dev.yml run --rm --entrypoint "" \
+#     dev-signal-cli signal-cli -a "$SIGNAL_BOT_PHONE" register [--captcha '<URL>']
+#   docker compose -f docker-compose.dev.yml run --rm --entrypoint "" \
+#     dev-signal-cli signal-cli -a "$SIGNAL_BOT_PHONE" verify <SMS_CODE>
+#
+# SIGNAL_CLI_VERSION: check https://github.com/AsamK/signal-cli/releases for latest.
+# Set it in .env before building: SIGNAL_CLI_VERSION=x.y.z
+
+ARG JRE_IMAGE=eclipse-temurin:21-jre-bookworm-slim
+FROM ${JRE_IMAGE}
+
+ARG SIGNAL_CLI_VERSION
+RUN test -n "$SIGNAL_CLI_VERSION" || \
+    (echo "ERROR: SIGNAL_CLI_VERSION build arg is required. Set it in .env." && exit 1)
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL -o /tmp/signal-cli.tar.gz \
+    "https://github.com/AsamK/signal-cli/releases/download/v${SIGNAL_CLI_VERSION}/signal-cli-${SIGNAL_CLI_VERSION}.tar.gz" && \
+    mkdir -p /opt/signal-cli && \
+    tar xf /tmp/signal-cli.tar.gz -C /opt && \
+    ln -s "/opt/signal-cli-${SIGNAL_CLI_VERSION}/bin/signal-cli" /usr/local/bin/signal-cli && \
+    rm /tmp/signal-cli.tar.gz
+
+# Persist Signal account keys across container restarts
+VOLUME /root/.local/share/signal-cli
+
+# JSON-RPC + SSE daemon port (consumed by OpenClaw, not exposed to host)
+EXPOSE 8080
+
+# Override SIGNAL_BOT_PHONE via environment in docker-compose.dev.yml.
+# signal-cli exits immediately if the account is not registered/linked.
+CMD ["sh", "-c", "exec signal-cli -a \"$SIGNAL_BOT_PHONE\" daemon --http 0.0.0.0:8080 --no-receive-stdout"]
