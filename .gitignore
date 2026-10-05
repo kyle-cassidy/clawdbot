@@ -326,3 +326,8 @@ extensions/diffs-language-pack/assets/viewer-runtime.js
 /.opengrep-out/
 /.crabbox-artifacts
 .comux*
+
+# Dev-stack runtime state (never commit): real Google Chat SA key, canvas host, dev workspace
+config-dev/googlechat-service-account.json
+config-dev/canvas/
+workspace-dev/
